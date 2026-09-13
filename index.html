@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LiSync — Webs, Automatización y Tarjetas NFC</title>
+<meta name="description" content="LiSync crea páginas web, automatizaciones y tarjetas NFC para negocios que quieren dar el salto digital.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="#top" class="logo">Li<span>Sync</span></a>
+    <nav class="nav-desktop" aria-label="Navegación principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#nfc">Tarjetas NFC</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a href="#contacto" class="btn btn-primary btn-sm nav-cta">Empezar proyecto</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Navegación móvil">
+    <a href="#servicios">Servicios</a>
+    <a href="#nfc">Tarjetas NFC</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#contacto" class="btn btn-primary">Empezar proyecto</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-blobs" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+    </div>
+    <div class="hero-grid" aria-hidden="true"></div>
+
+    <div class="container hero-content">
+      <div class="eyebrow reveal">
+        <span class="dot"></span> Webs · Automatización · Tarjetas NFC
+      </div>
+      <h1 class="reveal delay-1">
+        Lleva tu negocio al <span class="text-gradient">siguiente nivel</span> digital
+      </h1>
+      <p class="hero-sub reveal delay-2">
+        En <strong>LiSync</strong> diseñamos páginas web que impresionan, automatizamos tareas que te
+        quitan tiempo y ofrecemos tarjetas NFC de reseñas para que consigas más 5 estrellas en Google
+        con un solo toque.
+      </p>
+      <div class="hero-actions reveal delay-3">
+        <a href="#contacto" class="btn btn-primary btn-lg">
+          Quiero mi proyecto
+        </a>
+        <a href="#servicios" class="btn btn-ghost btn-lg">
+          Ver servicios
+        </a>
+      </div>
+
+      <div class="hero-badges reveal delay-4">
+        <div class="badge-item">
+          <span class="badge-icon">⚡</span>
+          <span>Respuesta en menos de 24h</span>
+        </div>
+        <div class="badge-item">
+          <span class="badge-icon">🎯</span>
+          <span>100% a medida</span>
+        </div>
+        <div class="badge-item">
+          <span class="badge-icon">🤝</span>
+          <span>Soporte cercano y continuo</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="#servicios" class="scroll-cue" aria-hidden="true"><span></span></a>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="section" id="servicios">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">Qué hacemos</span>
+        <h2>Tres formas de impulsar tu negocio</h2>
+        <p>Elige uno o combínalos todos — cada servicio está pensado para darte resultados visibles rápido.</p>
+      </div>
+
+      <div class="services-grid">
+        <article class="service-card reveal delay-1">
+          <div class="service-card-glow glow-purple"></div>
+          <h3>Páginas Web</h3>
+          <p>Sitios rápidos, modernos y responsive que convierten visitas en clientes. Diseño a medida,
+             sin plantillas genéricas.</p>
+          <ul class="service-list">
+            <li>Diseño 100% personalizado</li>
+            <li>Optimizado para móvil y velocidad</li>
+            <li>SEO básico incluido</li>
+          </ul>
+        </article>
+
+        <article class="service-card reveal delay-2">
+          <div class="service-card-glow glow-orange"></div>
+          <h3>Automatización</h3>
+          <p>Ahorra horas cada semana automatizando tareas repetitivas: mensajes, reportes, seguimiento
+             de clientes y más.</p>
+          <ul class="service-list">
+            <li>Flujos conectados a tus herramientas</li>
+            <li>Menos trabajo manual, menos errores</li>
+            <li>Escalable a medida que creces</li>
+          </ul>
+        </article>
+
+        <article class="service-card reveal delay-3">
+          <div class="service-card-glow glow-pink"></div>
+          <h3>Tarjetas NFC de reseñas</h3>
+          <p>Tarjetas NFC + QR de sobremesa ya configuradas con tu negocio. Tus clientes tocan o
+             escanean y dejan su reseña en Google al instante.</p>
+          <ul class="service-list">
+            <li>Configurada y lista para usar</li>
+            <li>Funciona con NFC (un toque) y QR</li>
+            <li>Consigue más reseñas sin pedirlo dos veces</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- NFC HIGHLIGHT -->
+  <section class="section nfc-section" id="nfc">
+    <div class="container nfc-inner">
+      <div class="nfc-visual reveal">
+        <div class="review-stand">
+          <div class="review-card-mock">
+            <span class="review-google-logo">
+              <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+            </span>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Escanea o toca para<br>dejarnos tu reseña</p>
+            <div class="review-qr" aria-hidden="true">
+              <div class="qr-grid">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <span class="review-nfc-tag">))) NFC</span>
+            <span class="review-business-name">Tu Negocio</span>
+          </div>
+          <div class="review-stand-base"></div>
+        </div>
+        <div class="nfc-tap-ring"></div>
+      </div>
+
+      <div class="nfc-copy reveal delay-1">
+        <span class="section-tag">Tarjetas NFC de reseñas de Google</span>
+        <h2>Consigue más reseñas de Google con un solo toque</h2>
+        <p>
+          Tarjetas NFC de sobremesa listas para usar, configuradas con el nombre y el enlace de
+          reseñas de tu negocio. Tus clientes solo acercan el móvil o escanean el QR y acceden
+          directamente a la pantalla para dejarte una reseña de 5 estrellas en Google — rápido,
+          sencillo y sin fricción.
+        </p>
+        <ul class="check-list">
+          <li>Configurada y lista para poner en tu mostrador o mesa</li>
+          <li>Funciona con NFC (un toque) y también con código QR</li>
+          <li>Ideal para negocios locales que quieren subir su reputación online</li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary">Quiero mi tarjeta de reseñas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section class="section" id="proceso">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">Cómo trabajamos</span>
+        <h2>Un proceso simple, sin complicaciones</h2>
+        <p>Hablamos claro y te acompañamos en cada paso, desde la idea hasta la entrega.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal delay-1">
+          <span class="step-num">01</span>
+          <h3>Cuéntame tu idea</h3>
+          <p>Me escribes por el formulario o WhatsApp y hablamos sobre lo que necesita tu negocio.</p>
+        </div>
+        <div class="step reveal delay-2">
+          <span class="step-num">02</span>
+          <h3>Propuesta y presupuesto</h3>
+          <p>Te preparo una propuesta clara: qué incluye, tiempos y precio, sin sorpresas.</p>
+        </div>
+        <div class="step reveal delay-3">
+          <span class="step-num">03</span>
+          <h3>Diseño y desarrollo</h3>
+          <p>Trabajo en tu proyecto y te muestro avances para que lo ajustemos juntos.</p>
+        </div>
+        <div class="step reveal delay-4">
+          <span class="step-num">04</span>
+          <h3>Entrega y soporte</h3>
+          <p>Recibes tu proyecto listo para usar, con soporte cercano si necesitas cambios.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="section contact-section" id="contacto">
+    <div class="hero-blobs" aria-hidden="true">
+      <span class="blob blob-2 contact-blob"></span>
+    </div>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">Hablemos</span>
+        <h2>¿Listo para empezar tu proyecto?</h2>
+        <p>Cuéntame qué necesitas y te respondo lo antes posible.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info reveal delay-1">
+          <a class="contact-card" href="https://wa.me/34633192246" target="_blank" rel="noopener noreferrer">
+            <span class="contact-icon icon-green">💬</span>
+            <div>
+              <h4>WhatsApp</h4>
+              <p>+34 633 19 22 46</p>
+            </div>
+          </a>
+          <a class="contact-card" href="mailto:lysincbussines@gmail.com">
+            <span class="contact-icon icon-purple">✉️</span>
+            <div>
+              <h4>Email</h4>
+              <p>lysincbussines@gmail.com</p>
+            </div>
+          </a>
+          <a class="contact-card" href="tel:+34633192246">
+            <span class="contact-icon icon-orange">📞</span>
+            <div>
+              <h4>Teléfono</h4>
+              <p>+34 633 19 22 46</p>
+            </div>
+          </a>
+        </div>
+
+        <form class="contact-form reveal delay-2" id="contactForm" action="https://formsubmit.co/lysincbussines@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Nuevo contacto desde LiSync 🚀">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Nombre</label>
+              <input type="text" id="name" name="Nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="Email" placeholder="tu@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="phone">Teléfono (opcional)</label>
+              <input type="tel" id="phone" name="Teléfono" placeholder="+34 600 000 000">
+            </div>
+            <div class="form-field">
+              <label for="service">Me interesa</label>
+              <select id="service" name="Servicio" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="Página web">Página web</option>
+                <option value="Automatización">Automatización</option>
+                <option value="Tarjeta NFC de reseñas">Tarjeta NFC de reseñas</option>
+                <option value="Varios / no lo sé aún">Varios / no lo sé aún</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Mensaje</label>
+            <textarea id="message" name="Mensaje" rows="4" placeholder="Cuéntame un poco sobre tu negocio y lo que necesitas..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-submit" id="submitBtn">
+            <span id="submitLabel">Enviar mensaje</span>
+          </button>
+
+          <p class="form-status" id="formStatus" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a href="#top" class="logo">Li<span>Sync</span></a>
+    <p>© <span id="year"></span> LiSync. Todos los derechos reservados.</p>
+    <div class="footer-links">
+      <a href="mailto:lysincbussines@gmail.com">lysincbussines@gmail.com</a>
+      <a href="https://wa.me/34633192246" target="_blank" rel="noopener noreferrer">+34 633 19 22 46</a>
+    </div>
+  </div>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/34633192246" target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp">
+  💬
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
