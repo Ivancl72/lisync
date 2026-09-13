@@ -81,7 +81,7 @@ form.addEventListener('submit', async (e) => {
       throw new Error('Respuesta no válida del servidor');
     }
   } catch (err) {
-    formStatus.textContent = 'No se pudo enviar. Escríbenos directo a lysincbussines@gmail.com o por WhatsApp.';
+    formStatus.textContent = 'No se pudo enviar. Escríbenos directo a lisyncbussines@gmail.com o por WhatsApp.';
     formStatus.classList.add('error');
   } finally {
     submitBtn.disabled = false;
