@@ -34,6 +34,60 @@ if (window.matchMedia('(min-width: 901px)').matches) {
   }, { passive: true });
 }
 
+// --- 3D tilt on hover (service cards + NFC review card) ---
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isDesktop = window.matchMedia('(min-width: 901px)').matches;
+
+function attachTilt(el, { max = 10, scale = 1.02, glare = false } = {}) {
+  let frame = null;
+
+  const onMove = (e) => {
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * max;
+    const ry = (px - 0.5) * max;
+
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      el.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${scale})`;
+      if (glare) {
+        el.style.setProperty('--glare-x', `${px * 100}%`);
+        el.style.setProperty('--glare-y', `${py * 100}%`);
+      }
+    });
+  };
+
+  const onLeave = () => {
+    cancelAnimationFrame(frame);
+    el.style.transform = '';
+  };
+
+  el.addEventListener('mousemove', onMove);
+  el.addEventListener('mouseleave', onLeave);
+}
+
+if (isDesktop && !prefersReducedMotion) {
+  document.querySelectorAll('.service-card').forEach(card => {
+    attachTilt(card, { max: 9, scale: 1.03, glare: true });
+  });
+
+  const aiStand = document.querySelector('.ai-stand');
+  if (aiStand) attachTilt(aiStand, { max: 16, scale: 1.05 });
+
+  // Hero 3D stage follows the cursor slightly for a parallax feel
+  const hero3d = document.getElementById('hero3d');
+  if (hero3d) {
+    window.addEventListener('mousemove', (e) => {
+      const rx = (0.5 - e.clientY / window.innerHeight) * 10;
+      const ry = (e.clientX / window.innerWidth - 0.5) * 14;
+      hero3d.style.setProperty('--mx', `${ry}deg`);
+      hero3d.style.setProperty('--my', `${rx}deg`);
+      hero3d.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
+    }, { passive: true });
+  }
+}
+
 // --- Scroll reveal ---
 const revealEls = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
