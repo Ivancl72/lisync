@@ -9,14 +9,23 @@ const videoIntroOverlay = document.getElementById('videoIntroOverlay');
 const siteHeaderEl = document.getElementById('siteHeader');
 
 if (videoIntro && introVideo) {
-  let videoReady = false;
+  // readyState can already be HAVE_METADATA (or higher) by the time this script
+  // runs — e.g. a cached/instant load — in which case 'loadedmetadata' has
+  // already fired and would never be caught below.
+  let videoReady = introVideo.readyState >= 1;
   let targetProgress = 0;
   let shownProgress = 0;
+  let isSeeking = false;
 
+  introVideo.pause();
   introVideo.addEventListener('loadedmetadata', () => {
     videoReady = true;
     introVideo.pause();
   });
+  // Wait for each seek to actually finish decoding before requesting the next
+  // one — re-assigning currentTime every animation frame aborts the in-flight
+  // seek before a frame is ever rendered, which is why the video looked frozen.
+  introVideo.addEventListener('seeked', () => { isSeeking = false; });
 
   function readScrollProgress() {
     const total = videoIntro.offsetHeight - window.innerHeight;
@@ -34,8 +43,12 @@ if (videoIntro && introVideo) {
     shownProgress += (targetProgress - shownProgress) * 0.18;
     if (Math.abs(targetProgress - shownProgress) < 0.0005) shownProgress = targetProgress;
 
-    if (videoReady && introVideo.duration) {
-      introVideo.currentTime = shownProgress * introVideo.duration;
+    if (videoReady && introVideo.duration && !isSeeking) {
+      const target = shownProgress * introVideo.duration;
+      if (Math.abs(introVideo.currentTime - target) > 0.033) {
+        isSeeking = true;
+        introVideo.currentTime = target;
+      }
     }
     if (videoIntroOverlay) {
       const fade = Math.max(0, 1 - shownProgress * 6);
