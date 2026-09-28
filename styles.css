@@ -41,6 +41,18 @@ body {
   overflow-x: hidden;
 }
 
+/* Hide the scrollbar chrome while keeping scroll fully functional */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
 h1, h2, h3, h4 {
   font-family: 'Space Grotesk', 'Inter', sans-serif;
   line-height: 1.15;
@@ -61,7 +73,7 @@ img { max-width: 100%; display: block; }
 /* ---------- video intro (scroll-scrubbed) ---------- */
 .video-intro {
   position: relative;
-  height: 300vh;
+  height: 180vh;
   background: #000;
 }
 .video-intro-sticky {
@@ -139,7 +151,7 @@ img { max-width: 100%; display: block; }
 .video-intro-skip:hover { background: rgba(255,255,255,0.14); color: var(--text); }
 
 @media (max-width: 640px) {
-  .video-intro { height: 220vh; }
+  .video-intro { height: 150vh; }
   .video-intro-skip { bottom: 20px; right: 20px; font-size: 12px; padding: 8px 14px; }
 }
 
@@ -203,8 +215,14 @@ img { max-width: 100%; display: block; }
   top: 0; left: 0; right: 0;
   z-index: 100;
   padding: 18px 0;
-  transition: background .3s, padding .3s, border-color .3s;
+  transition: background .3s, padding .3s, border-color .3s, opacity .4s ease;
   border-bottom: 1px solid transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+.site-header.header-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 .site-header.scrolled {
   padding: 12px 0;
