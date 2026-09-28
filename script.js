@@ -2,6 +2,44 @@
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// --- Video intro scrubbed by scroll position ---
+const videoIntro = document.getElementById('videoIntro');
+const introVideo = document.getElementById('introVideo');
+const videoIntroOverlay = document.getElementById('videoIntroOverlay');
+
+if (videoIntro && introVideo) {
+  let videoReady = false;
+  let latestProgress = 0;
+
+  introVideo.addEventListener('loadedmetadata', () => {
+    videoReady = true;
+    introVideo.pause();
+    applyProgress(latestProgress);
+  });
+
+  function applyProgress(progress) {
+    if (videoReady && introVideo.duration) {
+      introVideo.currentTime = progress * introVideo.duration;
+    }
+    if (videoIntroOverlay) {
+      const fade = Math.max(0, 1 - progress * 6);
+      videoIntroOverlay.style.opacity = fade;
+      videoIntroOverlay.style.transform = `translateY(${(1 - fade) * -30}px)`;
+    }
+  }
+
+  function updateVideoScroll() {
+    const total = videoIntro.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-videoIntro.getBoundingClientRect().top, 0), total);
+    latestProgress = total > 0 ? scrolled / total : 0;
+    applyProgress(latestProgress);
+  }
+
+  window.addEventListener('scroll', () => requestAnimationFrame(updateVideoScroll), { passive: true });
+  window.addEventListener('resize', updateVideoScroll);
+  updateVideoScroll();
+}
+
 // --- Header shrink on scroll ---
 const header = document.getElementById('siteHeader');
 const onScroll = () => {

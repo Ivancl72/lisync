@@ -58,13 +58,98 @@ img { max-width: 100%; display: block; }
   margin-inline: auto;
 }
 
+/* ---------- video intro (scroll-scrubbed) ---------- */
+.video-intro {
+  position: relative;
+  height: 300vh;
+  background: #000;
+}
+.video-intro-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.video-intro-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.15) 65%, rgba(11,7,20,0.9) 100%);
+  z-index: 1;
+}
+.video-intro-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+  padding: 0 24px;
+  transition: opacity .15s linear, transform .15s linear;
+}
+.video-intro-eyebrow {
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 18px;
+}
+.video-intro-title {
+  font-size: clamp(2.2rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0 0 16px;
+}
+.video-intro-sub {
+  font-size: 14px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0;
+}
+.video-intro-skip {
+  position: absolute;
+  bottom: 28px; right: 28px;
+  z-index: 2;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  transition: background .2s, color .2s;
+}
+.video-intro-skip:hover { background: rgba(255,255,255,0.14); color: var(--text); }
+
+@media (max-width: 640px) {
+  .video-intro { height: 220vh; }
+  .video-intro-skip { bottom: 20px; right: 20px; font-size: 12px; padding: 8px 14px; }
+}
+
 /* ---------- cursor glow ---------- */
 .cursor-glow {
   position: fixed;
   top: 0; left: 0;
   width: 500px; height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139,92,246,0.16), transparent 70%);
+  background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 1;
