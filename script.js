@@ -2,68 +2,7 @@
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// --- Video intro scrubbed by scroll position (smoothed) ---
-const videoIntro = document.getElementById('videoIntro');
-const introVideo = document.getElementById('introVideo');
-const videoIntroOverlay = document.getElementById('videoIntroOverlay');
-const siteHeaderEl = document.getElementById('siteHeader');
-
-if (videoIntro && introVideo) {
-  // readyState can already be HAVE_METADATA (or higher) by the time this script
-  // runs — e.g. a cached/instant load — in which case 'loadedmetadata' has
-  // already fired and would never be caught below.
-  let videoReady = introVideo.readyState >= 1;
-  let targetProgress = 0;
-  let shownProgress = 0;
-  let isSeeking = false;
-
-  introVideo.pause();
-  introVideo.addEventListener('loadedmetadata', () => {
-    videoReady = true;
-    introVideo.pause();
-  });
-  // Wait for each seek to actually finish decoding before requesting the next
-  // one — re-assigning currentTime every animation frame aborts the in-flight
-  // seek before a frame is ever rendered, which is why the video looked frozen.
-  introVideo.addEventListener('seeked', () => { isSeeking = false; });
-
-  function readScrollProgress() {
-    const total = videoIntro.offsetHeight - window.innerHeight;
-    const scrolled = Math.min(Math.max(-videoIntro.getBoundingClientRect().top, 0), total);
-    targetProgress = total > 0 ? scrolled / total : 0;
-
-    // Reveal the header only once the intro video has fully played out
-    if (siteHeaderEl) {
-      siteHeaderEl.classList.toggle('header-visible', targetProgress >= 0.995);
-    }
-  }
-
-  function tick() {
-    // Ease the visible progress toward the scroll target for a fluid, non-jumpy scrub
-    shownProgress += (targetProgress - shownProgress) * 0.18;
-    if (Math.abs(targetProgress - shownProgress) < 0.0005) shownProgress = targetProgress;
-
-    if (videoReady && introVideo.duration && !isSeeking) {
-      const target = shownProgress * introVideo.duration;
-      if (Math.abs(introVideo.currentTime - target) > 0.033) {
-        isSeeking = true;
-        introVideo.currentTime = target;
-      }
-    }
-    if (videoIntroOverlay) {
-      const fade = Math.max(0, 1 - shownProgress * 6);
-      videoIntroOverlay.style.opacity = fade;
-      videoIntroOverlay.style.transform = `translateY(${(1 - fade) * -30}px)`;
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  window.addEventListener('scroll', readScrollProgress, { passive: true });
-  window.addEventListener('resize', readScrollProgress);
-  readScrollProgress();
-  requestAnimationFrame(tick);
-}
+// --- Video hero: loops natively via the autoplay/loop attributes, no JS needed ---
 
 // --- Header shrink on scroll ---
 const header = document.getElementById('siteHeader');

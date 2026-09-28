@@ -13,18 +13,16 @@
 </head>
 <body>
 
-<!-- VIDEO INTRO (scroll-scrubbed) -->
+<!-- VIDEO HERO (looping background, normal scroll) -->
 <section class="video-intro" id="videoIntro">
-  <div class="video-intro-sticky">
-    <video id="introVideo" class="video-intro-video" src="video_para_3d.mp4" muted playsinline preload="auto"></video>
-    <div class="video-intro-shade" aria-hidden="true"></div>
-    <div class="video-intro-overlay" id="videoIntroOverlay">
-      <span class="video-intro-eyebrow">LiSync</span>
-      <h1 class="video-intro-title">El futuro digital<br>de tu negocio</h1>
-      <p class="video-intro-sub">Desplázate para descubrir</p>
-    </div>
-    <a href="#top" class="video-intro-skip">Saltar intro ↓</a>
+  <video class="video-intro-video" src="video_para_3d.mp4" autoplay loop muted playsinline preload="auto"></video>
+  <div class="video-intro-shade" aria-hidden="true"></div>
+  <div class="video-intro-overlay">
+    <span class="video-intro-eyebrow">LiSync</span>
+    <h1 class="video-intro-title">El futuro digital<br>de tu negocio</h1>
+    <p class="video-intro-sub">Desplázate para descubrir</p>
   </div>
+  <a href="#servicios" class="scroll-cue" aria-hidden="true"><span></span></a>
 </section>
 
 <div class="cursor-glow" id="cursorGlow"></div>
