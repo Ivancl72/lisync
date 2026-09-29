@@ -191,25 +191,36 @@
   <!-- AI INTEGRATION HIGHLIGHT -->
   <section class="section ai-section" id="ia">
     <div class="container ai-inner">
-      <div class="ai-visual reveal">
+      <div class="ai-visual reveal" aria-hidden="true">
+        <div class="ai-orb"></div>
+        <div class="ai-pulse-ring"></div>
         <div class="ai-stand">
           <div class="ai-card-mock">
             <div class="ai-card-header">
-              <span class="ai-status-dot"></span> Asistente IA · En línea
+              <span class="ai-avatar">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z" fill="currentColor"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2z" fill="currentColor" opacity=".7"/></svg>
+              </span>
+              <span class="ai-card-title">
+                Asistente IA
+                <small><span class="ai-status-dot"></span> En línea</small>
+              </span>
             </div>
-            <div class="ai-chat">
-              <div class="chat-bubble chat-user">¿Tenéis disponibilidad para hoy?</div>
-              <div class="chat-bubble chat-ai">
-                Sí, tengo un hueco a las 19:00. ¿Te lo reservo?
-                <span class="chat-typing"><span></span><span></span><span></span></span>
-              </div>
+            <div class="ai-chat" id="aiChat">
+              <div class="chat-bubble chat-user is-shown">¿Tenéis disponibilidad para hoy?</div>
+              <div class="chat-bubble chat-ai is-shown">Sí, tengo un hueco a las 19:00. ¿Te lo reservo?</div>
             </div>
-            <div class="ai-tags">
-              <span>24/7</span><span>WhatsApp</span><span>A tu medida</span>
+            <div class="ai-input">
+              <span>Escribe un mensaje…</span>
+              <span class="ai-send">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
             </div>
           </div>
+          <span class="ai-float ai-float--1">24/7</span>
+          <span class="ai-float ai-float--2">WhatsApp</span>
+          <span class="ai-float ai-float--3">Reservas automáticas</span>
+          <span class="ai-float ai-float--4">Respuesta al instante</span>
         </div>
-        <div class="ai-pulse-ring"></div>
       </div>
 
       <div class="ai-copy reveal delay-1">

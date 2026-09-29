@@ -214,6 +214,60 @@ if (!isDesktop && !prefersReducedMotion) {
   }, { passive: true });
 }
 
+// --- AI section: looping demo conversation (runs only while on screen) ---
+const aiChat = document.getElementById('aiChat');
+if (aiChat && !prefersReducedMotion && 'IntersectionObserver' in window) {
+  const conversation = [
+    ['¿Tenéis disponibilidad para hoy?', 'Sí, tengo un hueco a las 19:00. ¿Te lo reservo?'],
+    ['¿Hacéis envíos a domicilio?', 'Sí, llega en 24–48h. ¿Te paso el catálogo?'],
+    ['¿A qué hora abrís mañana?', 'Abrimos a las 9:00. ¿Quieres que te guarde cita?'],
+  ];
+  const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const showBubble = async (className, text) => {
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${className}`;
+    if (text) {
+      bubble.textContent = text;
+    } else {
+      for (let i = 0; i < 3; i++) bubble.appendChild(document.createElement('span'));
+    }
+    aiChat.appendChild(bubble);
+    await wait(40);
+    bubble.classList.add('is-shown');
+    return bubble;
+  };
+
+  let onScreen = false;
+  let running = false;
+  let turn = 1; // turn 0 is already rendered in the HTML
+
+  const play = async () => {
+    running = true;
+    while (onScreen) {
+      await wait(2800);
+      if (!onScreen) break;
+      [...aiChat.children].forEach(el => el.classList.remove('is-shown'));
+      await wait(450);
+      aiChat.replaceChildren();
+
+      const [question, answer] = conversation[turn % conversation.length];
+      turn++;
+      await showBubble('chat-user', question);
+      await wait(700);
+      const typing = await showBubble('chat-ai chat-typing-bubble');
+      await wait(1400);
+      typing.remove();
+      await showBubble('chat-ai', answer);
+    }
+    running = false;
+  };
+
+  new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    if (onScreen && !running) play();
+  }, { threshold: 0.3 }).observe(aiChat);
+}
+
 // --- Services: swipeable 3D coverflow carousel on small screens ---
 const servicesGrid = document.querySelector('.services-grid');
 const serviceCards = servicesGrid ? [...servicesGrid.querySelectorAll('.service-card')] : [];
