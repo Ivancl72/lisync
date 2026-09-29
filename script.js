@@ -33,6 +33,19 @@ if (heroVideo) {
     const attempt = heroVideo.play();
     if (attempt) attempt.catch(() => {});
   };
+
+  // Phones held upright get the vertical cut; everything else the horizontal one.
+  // src is set here (not in the HTML) so only the right file is ever downloaded.
+  const portraitPhoneMq = window.matchMedia('(max-width: 900px) and (orientation: portrait)');
+  const pickVideoSource = () => {
+    const src = portraitPhoneMq.matches ? heroVideo.dataset.srcMobile : heroVideo.dataset.srcDesktop;
+    if (heroVideo.getAttribute('src') === src) return;
+    heroVideo.src = src;
+    tryPlay();
+  };
+  pickVideoSource();
+  portraitPhoneMq.addEventListener('change', pickVideoSource);
+
   tryPlay();
   heroVideo.addEventListener('canplay', tryPlay, { once: true });
 
