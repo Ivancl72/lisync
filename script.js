@@ -244,11 +244,11 @@ if (aiChat && !prefersReducedMotion && 'IntersectionObserver' in window) {
   const play = async () => {
     running = true;
     while (onScreen) {
-      await wait(2800);
+      await wait(2600);
       if (!onScreen) break;
-      [...aiChat.children].forEach(el => el.classList.remove('is-shown'));
-      await wait(450);
-      aiChat.replaceChildren();
+      // New messages push older ones up and out of the (clipped) chat area,
+      // like a real chat — it never goes blank between exchanges.
+      while (aiChat.children.length > 4) aiChat.firstElementChild.remove();
 
       const [question, answer] = conversation[turn % conversation.length];
       turn++;

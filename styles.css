@@ -814,7 +814,10 @@ body.menu-open { overflow: hidden; }
   justify-content: flex-end;
   gap: 8px;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
 }
+.chat-bubble { flex-shrink: 0; }
 .chat-bubble {
   max-width: 85%;
   padding: 10px 14px;
@@ -906,10 +909,21 @@ body.menu-open { overflow: hidden; }
   background: var(--gradient-1);
   vertical-align: 1px;
 }
-.ai-float--1 { top: 4%;   left: -22%; --z: 80px;  animation-delay: 0s; }
-.ai-float--2 { top: 30%;  right: -26%; --z: 110px; animation-delay: -1.5s; }
-.ai-float--3 { bottom: 20%; left: -30%; --z: 60px; animation-delay: -3s; }
-.ai-float--4 { bottom: -4%; right: -16%; --z: 95px; animation-delay: -4.5s; }
+/* Chips sit completely outside the device so they never cover the chat:
+   beside it on wide screens, above/below it where there's no side room */
+.ai-float--1 { right: calc(100% + 18px); top: 10%;  --z: 70px;  animation-delay: 0s; }
+.ai-float--3 { right: calc(100% + 18px); top: 64%;  --z: 50px;  animation-delay: -3s; }
+.ai-float--2 { left: calc(100% + 18px);  top: 26%;  --z: 90px;  animation-delay: -1.5s; }
+.ai-float--4 { left: calc(100% + 18px);  top: 80%;  --z: 60px;  animation-delay: -4.5s; }
+
+@media (max-width: 1179px) {
+  .ai-visual { min-height: 0; padding: 72px 0; }
+  .ai-float--1, .ai-float--2 { top: -58px; }
+  .ai-float--3, .ai-float--4 { top: auto; bottom: -58px; }
+  .ai-float--1, .ai-float--3 { right: auto; left: 0; }
+  .ai-float--2, .ai-float--4 { left: auto; right: 0; }
+  .ai-float { --z: 40px; }
+}
 @keyframes aiChip {
   0%, 100% { transform: translateZ(var(--z)) translateY(0); }
   50% { transform: translateZ(var(--z)) translateY(-10px); }
@@ -960,10 +974,6 @@ body.menu-open { overflow: hidden; }
   .ai-chat { height: 164px; }
   .chat-bubble { font-size: 12.5px; padding: 9px 12px; }
   .ai-float { font-size: 11px; padding: 7px 11px; }
-  .ai-float--1 { left: -10%; --z: 50px; }
-  .ai-float--2 { right: -4%; top: 24%; --z: 60px; }
-  .ai-float--3 { left: -12%; --z: 40px; }
-  .ai-float--4 { right: -4%; --z: 55px; }
   .check-list li { font-size: 14px; }
 }
 
