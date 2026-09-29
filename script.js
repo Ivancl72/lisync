@@ -2,7 +2,47 @@
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// --- Video hero: loops natively via the autoplay/loop attributes, no JS needed ---
+// --- Always open at the very top, never at a #section ---
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+const goToVeryTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+goToVeryTop();
+window.addEventListener('load', goToVeryTop);
+window.addEventListener('pageshow', (e) => { if (e.persisted) goToVeryTop(); });
+
+// In-page links scroll smoothly without writing #hash into the URL
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  const id = link.getAttribute('href');
+  e.preventDefault();
+  if (id === '#' || id === '#top') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const target = document.querySelector(id);
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// --- Hero video: force muted autoplay, retry if the browser blocked it ---
+const heroVideo = document.querySelector('.video-intro-video');
+if (heroVideo) {
+  heroVideo.muted = true;
+  heroVideo.defaultMuted = true;
+  const tryPlay = () => {
+    const attempt = heroVideo.play();
+    if (attempt) attempt.catch(() => {});
+  };
+  tryPlay();
+  heroVideo.addEventListener('canplay', tryPlay, { once: true });
+  // Some phones (e.g. iOS Low Power Mode) only allow playback after the first interaction
+  ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(evt => {
+    window.addEventListener(evt, () => { if (heroVideo.paused) tryPlay(); }, { once: true, passive: true });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && heroVideo.paused) tryPlay();
+  });
+}
 
 // --- Header shrink on scroll ---
 const header = document.getElementById('siteHeader');
