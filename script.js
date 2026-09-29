@@ -15,17 +15,15 @@ window.addEventListener('scroll', onScroll, { passive: true });
 // --- Mobile menu ---
 const menuToggle = document.getElementById('menuToggle');
 const navMobile = document.getElementById('navMobile');
-menuToggle.addEventListener('click', () => {
-  const isOpen = navMobile.classList.toggle('open');
+const setMenu = (isOpen) => {
+  navMobile.classList.toggle('open', isOpen);
   menuToggle.classList.toggle('open', isOpen);
   menuToggle.setAttribute('aria-expanded', String(isOpen));
-});
+  document.body.classList.toggle('menu-open', isOpen);
+};
+menuToggle.addEventListener('click', () => setMenu(!navMobile.classList.contains('open')));
 navMobile.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navMobile.classList.remove('open');
-    menuToggle.classList.remove('open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-  });
+  link.addEventListener('click', () => setMenu(false));
 });
 
 // --- Cursor glow (desktop only) ---
@@ -88,6 +86,72 @@ if (isDesktop && !prefersReducedMotion) {
       hero3d.style.transform = `rotateY(${ry}deg) rotateX(${rx}deg)`;
     }, { passive: true });
   }
+}
+
+// --- Touch devices: 3D elements rotate as they travel through the viewport ---
+if (!isDesktop && !prefersReducedMotion) {
+  const scrollTilted = [
+    { el: document.getElementById('hero3d'), rx: 18, ry: -24 },
+    { el: document.querySelector('.ai-stand'), rx: 14, ry: 10 },
+  ].filter(item => item.el);
+
+  let ticking = false;
+  const updateScrollTilt = () => {
+    ticking = false;
+    const vh = window.innerHeight;
+    scrollTilted.forEach(({ el, rx, ry }) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > vh + 100) return;
+      const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
+      el.style.transform = `perspective(900px) rotateX(${(p * rx).toFixed(2)}deg) rotateY(${(p * ry).toFixed(2)}deg)`;
+    });
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(updateScrollTilt); }
+  }, { passive: true });
+  updateScrollTilt();
+}
+
+// --- Services: swipeable 3D coverflow carousel on small screens ---
+const servicesGrid = document.querySelector('.services-grid');
+const serviceCards = servicesGrid ? [...servicesGrid.querySelectorAll('.service-card')] : [];
+const serviceDots = [...document.querySelectorAll('#servicesDots span')];
+const carouselMq = window.matchMedia('(max-width: 900px)');
+
+function updateCoverflow() {
+  if (!carouselMq.matches) {
+    serviceCards.forEach(card => {
+      card.style.removeProperty('--cf-ry');
+      card.style.removeProperty('--cf-s');
+    });
+    return;
+  }
+  const gridRect = servicesGrid.getBoundingClientRect();
+  const center = gridRect.left + gridRect.width / 2;
+  let closest = 0;
+  let closestDist = Infinity;
+
+  serviceCards.forEach((card, i) => {
+    const r = card.getBoundingClientRect();
+    const offset = (r.left + r.width / 2 - center) / r.width;
+    const clamped = Math.max(-1, Math.min(1, offset));
+    card.style.setProperty('--cf-ry', `${(clamped * 26).toFixed(2)}deg`);
+    card.style.setProperty('--cf-s', (1 - Math.abs(clamped) * 0.06).toFixed(3));
+    if (Math.abs(offset) < closestDist) { closestDist = Math.abs(offset); closest = i; }
+  });
+  serviceDots.forEach((dot, i) => dot.classList.toggle('active', i === closest));
+}
+
+if (servicesGrid) {
+  let cfTicking = false;
+  servicesGrid.addEventListener('scroll', () => {
+    if (!cfTicking) {
+      cfTicking = true;
+      requestAnimationFrame(() => { cfTicking = false; updateCoverflow(); });
+    }
+  }, { passive: true });
+  window.addEventListener('resize', updateCoverflow);
+  updateCoverflow();
 }
 
 // --- Scroll reveal ---
