@@ -87,6 +87,16 @@ img { max-width: 100%; display: block; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+}
+/* Never show the browser's native play button / controls over the background video */
+.video-intro-video::-webkit-media-controls,
+.video-intro-video::-webkit-media-controls-panel,
+.video-intro-video::-webkit-media-controls-overlay-play-button,
+.video-intro-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0 !important;
 }
 .video-intro-shade {
   position: absolute;

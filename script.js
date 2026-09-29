@@ -35,10 +35,17 @@ if (heroVideo) {
   };
   tryPlay();
   heroVideo.addEventListener('canplay', tryPlay, { once: true });
-  // Some phones (e.g. iOS Low Power Mode) only allow playback after the first interaction
-  ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(evt => {
-    window.addEventListener(evt, () => { if (heroVideo.paused) tryPlay(); }, { once: true, passive: true });
-  });
+
+  // iOS Low Power Mode blocks all autoplay; it only allows play() inside a real
+  // user gesture (touchend/click), so keep retrying on those until it's playing.
+  const gestureEvents = ['touchend', 'click', 'pointerup', 'keydown', 'touchstart', 'scroll'];
+  const onGesture = () => {
+    if (!heroVideo.paused) return;
+    tryPlay();
+  };
+  const stopListening = () => gestureEvents.forEach(evt => window.removeEventListener(evt, onGesture));
+  gestureEvents.forEach(evt => window.addEventListener(evt, onGesture, { passive: true }));
+  heroVideo.addEventListener('playing', stopListening, { once: true });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && heroVideo.paused) tryPlay();
   });
