@@ -1,5 +1,23 @@
 /* ===================== LiSync — Estilos ===================== */
 
+/* Self-hosted variable fonts (latin subset: covers Spanish ñ, tildes, ¿ ¡) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('fonts/space-grotesk-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --bg: #0b0714;
   --bg-alt: #120a22;
@@ -241,7 +259,7 @@ img { max-width: 100%; display: block; }
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 40px; height: 40px;
+  width: 44px; height: 44px;
   background: rgba(255,255,255,0.06);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -857,7 +875,7 @@ body.menu-open { overflow: hidden; }
   font-size: 20px;
   flex-shrink: 0;
 }
-.contact-card h4 { margin: 0 0 2px; font-size: 15px; color: var(--text); }
+.contact-card h3 { margin: 0 0 2px; font-size: 15px; color: var(--text); letter-spacing: 0; }
 .contact-card p { margin: 0; font-size: 14px; color: var(--text-dim); }
 
 .contact-form {
@@ -1063,6 +1081,62 @@ body.menu-open { overflow: hidden; }
 .delay-3.in-view { transition-delay: .24s; }
 .delay-4.in-view { transition-delay: .32s; }
 
+/* ---------- accessibility ---------- */
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.btn:focus-visible { outline-offset: 4px; border-radius: 999px; }
+.hero:focus { outline: none; }
+
+.skip-link {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--gradient-1);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  transform: translateY(-150%);
+  transition: transform .2s var(--ease);
+}
+.skip-link:focus { transform: translateY(0); }
+
+.honeypot {
+  position: absolute !important;
+  left: -9999px;
+  width: 1px; height: 1px;
+  opacity: 0;
+}
+
+/* Discreet pause/play control for the looping background video (WCAG 2.2.2) */
+.video-toggle {
+  position: absolute;
+  left: 24px;
+  bottom: 28px;
+  z-index: 3;
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(11,7,20,0.35);
+  backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  opacity: .6;
+  transition: opacity .2s, color .2s, background .2s;
+}
+.video-toggle:hover, .video-toggle:focus-visible { opacity: 1; color: #fff; background: rgba(11,7,20,0.6); }
+.video-toggle svg { width: 14px; height: 14px; }
+.video-toggle .icon-play { display: none; }
+.video-toggle[aria-pressed="true"] .icon-play { display: block; }
+.video-toggle[aria-pressed="true"] .icon-pause { display: none; }
+
 /* ================= MOBILE & TABLET ================= */
 
 body { -webkit-tap-highlight-color: transparent; }
@@ -1211,6 +1285,7 @@ body { -webkit-tap-highlight-color: transparent; }
 
 /* Touch devices: tactile press feedback instead of hover */
 @media (hover: none) {
+  .video-toggle { width: 44px; height: 44px; left: 18px; bottom: 22px; }
   .step:hover, .contact-card:hover { transform: none; }
   .btn:active { transform: scale(.97); }
   .contact-card:active { transform: scale(.98); border-color: rgba(255,255,255,0.2); }

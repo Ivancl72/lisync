@@ -21,18 +21,51 @@ document.addEventListener('click', (e) => {
     return;
   }
   const target = document.querySelector(id);
-  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Skip link: move keyboard focus into the content, not just the viewport
+  if (link.classList.contains('skip-link')) target.focus({ preventScroll: true });
 });
 
 // --- Hero video: force muted autoplay, retry if the browser blocked it ---
 const heroVideo = document.querySelector('.video-intro-video');
+const videoToggle = document.getElementById('videoToggle');
 if (heroVideo) {
   heroVideo.muted = true;
   heroVideo.defaultMuted = true;
+
+  // Autoplay is skipped for users who ask the OS for reduced motion, and the
+  // toggle lets anyone stop the loop (WCAG 2.2.2 Pause, Stop, Hide).
+  let userPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let heroOnScreen = true;
+
+  const syncToggle = () => {
+    if (!videoToggle) return;
+    videoToggle.setAttribute('aria-pressed', String(userPaused));
+    videoToggle.setAttribute('aria-label', userPaused ? 'Reproducir video de fondo' : 'Pausar video de fondo');
+  };
   const tryPlay = () => {
+    if (userPaused || !heroOnScreen) return;
     const attempt = heroVideo.play();
     if (attempt) attempt.catch(() => {});
   };
+  syncToggle();
+  if (videoToggle) {
+    videoToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userPaused = !userPaused;
+      syncToggle();
+      if (userPaused) heroVideo.pause(); else tryPlay();
+    });
+  }
+
+  // Don't spend CPU/battery decoding the video while it's scrolled out of view
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      heroOnScreen = entry.isIntersecting;
+      if (heroOnScreen) tryPlay(); else heroVideo.pause();
+    }).observe(heroVideo);
+  }
 
   // Phones held upright get the vertical cut; everything else the horizontal one.
   // src is set here (not in the HTML) so only the right file is ever downloaded.
@@ -69,7 +102,8 @@ const header = document.getElementById('siteHeader');
 const onScroll = () => {
   header.classList.toggle('scrolled', window.scrollY > 20);
 };
-onScroll();
+// First read waits a frame so it doesn't force a synchronous layout during load
+requestAnimationFrame(onScroll);
 window.addEventListener('scroll', onScroll, { passive: true });
 
 // --- Mobile menu ---
@@ -79,9 +113,16 @@ const setMenu = (isOpen) => {
   navMobile.classList.toggle('open', isOpen);
   menuToggle.classList.toggle('open', isOpen);
   menuToggle.setAttribute('aria-expanded', String(isOpen));
+  menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
   document.body.classList.toggle('menu-open', isOpen);
 };
 menuToggle.addEventListener('click', () => setMenu(!navMobile.classList.contains('open')));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navMobile.classList.contains('open')) {
+    setMenu(false);
+    menuToggle.focus();
+  }
+});
 navMobile.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => setMenu(false));
 });
@@ -169,7 +210,7 @@ if (!isDesktop && !prefersReducedMotion) {
   window.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(updateScrollTilt); }
   }, { passive: true });
-  updateScrollTilt();
+  requestAnimationFrame(updateScrollTilt);
 }
 
 // --- Services: swipeable 3D coverflow carousel on small screens ---
@@ -211,7 +252,7 @@ if (servicesGrid) {
     }
   }, { passive: true });
   window.addEventListener('resize', updateCoverflow);
-  updateCoverflow();
+  requestAnimationFrame(updateCoverflow);
 }
 
 // --- Scroll reveal ---
