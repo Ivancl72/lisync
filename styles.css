@@ -1303,8 +1303,19 @@ body { -webkit-tap-highlight-color: transparent; }
 .video-intro { height: 100vh; height: 100svh; }
 .carousel-dots { display: none; }
 
+.hero-actions--stacked { display: none; }
+
 /* Hero 3D card stack: stacked under the copy instead of hidden */
 @media (max-width: 1179px) {
+  .hero-actions--desktop { display: none; }
+  .hero-actions--stacked {
+    display: flex;
+    order: 3;
+    position: relative;
+    z-index: 2;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
   .hero { flex-direction: column; justify-content: center; }
   .hero-3d-wrap {
     display: block;
@@ -1388,7 +1399,7 @@ body { -webkit-tap-highlight-color: transparent; }
   .hero-actions { flex-direction: column; gap: 12px; margin-bottom: 32px; }
   .hero-actions .btn { width: 100%; }
 
-  .hero-3d-wrap { width: 260px; height: 240px; margin: 28px auto 24px; }
+  .hero-3d-wrap { width: 260px; height: 240px; margin: 52px auto 28px; }
   .hero-3d-card { width: 176px; height: 108px; font-size: 13px; border-radius: 16px; }
   .hero-3d-card .emoji { font-size: 24px; }
   .hero-3d-card--1 { transform: translateZ(60px) translateY(-66px) rotate(-6deg); }
