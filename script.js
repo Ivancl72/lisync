@@ -207,10 +207,11 @@ if (!isDesktop && !prefersReducedMotion) {
       el.style.transform = `perspective(900px) rotateX(${(p * rx).toFixed(2)}deg) rotateY(${(p * ry).toFixed(2)}deg)`;
     });
   };
+  // No initial pass: both elements start below the video hero, and the first
+  // scroll sets them before they're visible — avoids a layout pass during load.
   window.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(updateScrollTilt); }
   }, { passive: true });
-  requestAnimationFrame(updateScrollTilt);
 }
 
 // --- Services: swipeable 3D coverflow carousel on small screens ---
@@ -252,7 +253,18 @@ if (servicesGrid) {
     }
   }, { passive: true });
   window.addEventListener('resize', updateCoverflow);
-  requestAnimationFrame(updateCoverflow);
+  // Lay out the coverflow only once the carousel approaches the viewport
+  if ('IntersectionObserver' in window) {
+    const cfObserver = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) {
+        updateCoverflow();
+        cfObserver.disconnect();
+      }
+    }, { rootMargin: '300px 0px' });
+    cfObserver.observe(servicesGrid);
+  } else {
+    requestAnimationFrame(updateCoverflow);
+  }
 }
 
 // --- Scroll reveal ---

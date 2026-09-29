@@ -124,12 +124,18 @@ img { max-width: 100%; display: block; }
 }
 .video-intro-overlay {
   position: absolute;
-  left: 0; right: 0;
-  bottom: 32px;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
   z-index: 2;
+  width: max-content;
+  max-width: calc(100% - 140px);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
   text-align: center;
   color: #fff;
-  padding: 0 24px;
 }
 .video-intro-sub {
   font-size: 13px;
