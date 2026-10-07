@@ -158,11 +158,14 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text);
   margin: 0;
-  transition: color .2s;
+  animation: cueBlink 2s ease-in-out infinite;
 }
-.video-intro-overlay:hover .video-intro-sub { color: var(--text); }
+@keyframes cueBlink {
+  0%, 100% { opacity: .3; }
+  50% { opacity: 1; }
+}
 
 /* ---------- cursor glow ---------- */
 .cursor-glow {
