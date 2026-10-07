@@ -1250,12 +1250,13 @@ body.menu-open { overflow: hidden; }
 .footer-wordmark {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: clamp(5rem, 22vw, 18rem);
-  line-height: .8;
-  letter-spacing: -0.05em;
+  font-size: clamp(3.5rem, 14vw, 10rem);
+  /* Tall enough box for the whole glyphs (incl. the descender of "y"): background-clip:text only paints inside it */
+  line-height: 1.25;
+  padding-bottom: .05em;
+  letter-spacing: -0.04em;
   text-align: center;
-  margin-bottom: -0.12em;
-  background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0));
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
