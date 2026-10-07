@@ -94,10 +94,26 @@ img { max-width: 100%; display: block; }
   height: 100vh;
   min-height: 560px;
   overflow: hidden;
-  background: #000;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+/* Bottom of the video melts into the page colour (eased stops avoid a visible band) */
+.video-intro::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: clamp(180px, 38%, 380px);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(11,7,20,0) 0%,
+    rgba(11,7,20,0.10) 20%,
+    rgba(11,7,20,0.35) 40%,
+    rgba(11,7,20,0.65) 60%,
+    rgba(11,7,20,0.90) 80%,
+    rgb(11,7,20) 100%);
 }
 .video-intro-video {
   position: absolute;
@@ -119,7 +135,7 @@ img { max-width: 100%; display: block; }
 .video-intro-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.25) 70%, rgba(11,7,20,0.85) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.2) 100%);
   z-index: 1;
 }
 .video-intro-overlay {
@@ -342,6 +358,22 @@ body.menu-open { overflow: hidden; }
   align-items: center;
   padding: 140px 0 100px;
   overflow: hidden;
+}
+/* Top of the hero grows out of the page colour, so the video above blends in */
+.hero::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: clamp(160px, 26vh, 300px);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgb(11,7,20) 0%,
+    rgba(11,7,20,0.90) 20%,
+    rgba(11,7,20,0.65) 40%,
+    rgba(11,7,20,0.35) 60%,
+    rgba(11,7,20,0.10) 80%,
+    rgba(11,7,20,0) 100%);
 }
 .hero-blobs {
   position: absolute;
