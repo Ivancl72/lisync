@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://lisync.vercel.app/sitemap.xml
+Sitemap: https://lisync.eu/sitemap.xml
