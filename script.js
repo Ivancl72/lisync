@@ -334,7 +334,7 @@ if (aiChat && aiCard && aiForm && aiInput) {
     startLive();
 
     if (aiState.turns >= MAX_TURNS) {
-      addBubble('chat-ai', 'Hemos llegado al límite de la demostración. Si quieres seguir hablando, escríbenos desde el formulario de contacto o a lisyncbussines@gmail.com.');
+      addBubble('chat-ai', 'Hemos llegado al límite de la demostración. Si quieres seguir hablando, escríbenos desde el formulario de contacto o a contacto@lisync.eu.');
       return;
     }
 
@@ -368,8 +368,8 @@ if (aiChat && aiCard && aiForm && aiInput) {
     } catch (error) {
       typing.remove();
       addBubble('chat-ai', error.message === 'rate'
-        ? 'Has hecho muchas preguntas seguidas. Inténtalo de nuevo en unos minutos o escríbenos a lisyncbussines@gmail.com.'
-        : 'Ahora mismo la demostración no está disponible. Puedes escribirnos a lisyncbussines@gmail.com y te respondemos en menos de 48 horas.');
+        ? 'Has hecho muchas preguntas seguidas. Inténtalo de nuevo en unos minutos o escríbenos a contacto@lisync.eu.'
+        : 'Ahora mismo la demostración no está disponible. Puedes escribirnos a contacto@lisync.eu y te respondemos en menos de 48 horas.');
     } finally {
       clearTimeout(timer);
       aiChat.removeAttribute('aria-busy');
@@ -493,7 +493,7 @@ form.addEventListener('submit', async (e) => {
       throw new Error('Respuesta no válida del servidor');
     }
   } catch (err) {
-    formStatus.textContent = 'No se pudo enviar. Escríbenos directo a lisyncbussines@gmail.com o por WhatsApp.';
+    formStatus.textContent = 'No se pudo enviar. Escríbenos directo a contacto@lisync.eu o por WhatsApp.';
     formStatus.classList.add('error');
   } finally {
     submitBtn.disabled = false;

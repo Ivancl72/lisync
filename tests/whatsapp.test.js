@@ -148,7 +148,7 @@ test('if Claude fails, the customer gets a fallback and Meta still gets 200', as
   claudeReply = () => ({ ok: false, status: 529, json: async () => ({ error: { type: 'overloaded_error' } }) });
   const res = await post(webhook({ from: '34666666666' }));
   assert.equal(res.status, 200);
-  assert.match(sentTexts()[0], /lisyncbussines@gmail\.com/);
+  assert.match(sentTexts()[0], /contacto@lisync\.eu/);
 });
 
 test('a failed Claude call does not poison the conversation history', async () => {
