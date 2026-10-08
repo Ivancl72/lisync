@@ -143,6 +143,7 @@ function attachTilt(el, { max = 10, scale = 1.02, glare = false } = {}) {
   let frame = null;
 
   const onMove = (e) => {
+    if (el.dataset.tilt === 'off') return;
     const rect = el.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
@@ -201,6 +202,7 @@ if (!isDesktop && !prefersReducedMotion) {
     ticking = false;
     const vh = window.innerHeight;
     scrollTilted.forEach(({ el, rx, ry }) => {
+      if (el.dataset.tilt === 'off') return;
       const r = el.getBoundingClientRect();
       if (r.bottom < -100 || r.top > vh + 100) return;
       const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / vh));
@@ -214,16 +216,23 @@ if (!isDesktop && !prefersReducedMotion) {
   }, { passive: true });
 }
 
-// --- AI section: looping demo conversation (runs only while on screen) ---
+// --- AI section: a looping demo that turns into a real chat when the visitor engages ---
 const aiChat = document.getElementById('aiChat');
-if (aiChat && !prefersReducedMotion && 'IntersectionObserver' in window) {
-  const conversation = [
-    ['¿Tenéis disponibilidad para hoy?', 'Sí, tengo un hueco a las 19:00. ¿Te lo reservo?'],
-    ['¿Hacéis envíos a domicilio?', 'Sí, llega en 24–48h. ¿Te paso el catálogo?'],
-    ['¿A qué hora abrís mañana?', 'Abrimos a las 9:00. ¿Quieres que te guarde cita?'],
-  ];
+const aiCard = document.getElementById('aiCard');
+const aiStandEl = document.querySelector('.ai-stand');
+const aiForm = document.getElementById('aiForm');
+const aiInput = document.getElementById('aiInput');
+const aiSuggest = document.getElementById('aiSuggest');
+const aiNote = document.getElementById('aiNote');
+const aiTry = document.getElementById('aiTry');
+
+if (aiChat && aiCard && aiForm && aiInput) {
+  const aiState = { live: false, busy: false, turns: 0, demoToken: 0 };
+  const history = [];
+  const MAX_TURNS = 6; // matches the 12-message limit enforced by /api/chat
   const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-  const showBubble = async (className, text) => {
+
+  const addBubble = (className, text) => {
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${className}`;
     if (text) {
@@ -232,40 +241,156 @@ if (aiChat && !prefersReducedMotion && 'IntersectionObserver' in window) {
       for (let i = 0; i < 3; i++) bubble.appendChild(document.createElement('span'));
     }
     aiChat.appendChild(bubble);
-    await wait(40);
-    bubble.classList.add('is-shown');
+    requestAnimationFrame(() => {
+      bubble.classList.add('is-shown');
+      if (!aiState.live) return;
+      // Long answers: start reading at the top of the new bubble, not at its end
+      const tall = bubble.offsetHeight > aiChat.clientHeight - 24;
+      aiChat.scrollTop = tall
+        ? bubble.getBoundingClientRect().top - aiChat.getBoundingClientRect().top + aiChat.scrollTop - 8
+        : aiChat.scrollHeight;
+    });
     return bubble;
   };
 
-  let onScreen = false;
-  let running = false;
-  let turn = 1; // turn 0 is already rendered in the HTML
+  // ---- Looping demo (only while on screen, and not under reduced motion) ----
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    const conversation = [
+      ['¿Tenéis disponibilidad para hoy?', 'Sí, tengo un hueco a las 19:00. ¿Te lo reservo?'],
+      ['¿Hacéis envíos a domicilio?', 'Sí, llega en 24–48h. ¿Te paso el catálogo?'],
+      ['¿A qué hora abrís mañana?', 'Abrimos a las 9:00. ¿Quieres que te guarde cita?'],
+    ];
+    let onScreen = false;
+    let running = false;
+    let turn = 1; // turn 0 is already rendered in the HTML
 
-  const play = async () => {
-    running = true;
-    while (onScreen) {
-      await wait(2600);
-      if (!onScreen) break;
-      // New messages push older ones up and out of the (clipped) chat area,
-      // like a real chat — it never goes blank between exchanges.
-      while (aiChat.children.length > 4) aiChat.firstElementChild.remove();
+    const play = async () => {
+      running = true;
+      const token = aiState.demoToken;
+      const stopped = () => !onScreen || aiState.live || token !== aiState.demoToken;
+      while (!stopped()) {
+        await wait(2600);
+        if (stopped()) break;
+        // New messages push older ones up and out of the (clipped) chat area,
+        // like a real chat: it never goes blank between exchanges.
+        while (aiChat.children.length > 4) aiChat.firstElementChild.remove();
 
-      const [question, answer] = conversation[turn % conversation.length];
-      turn++;
-      await showBubble('chat-user', question);
-      await wait(700);
-      const typing = await showBubble('chat-ai chat-typing-bubble');
-      await wait(1400);
-      typing.remove();
-      await showBubble('chat-ai', answer);
+        const [question, answer] = conversation[turn % conversation.length];
+        turn++;
+        addBubble('chat-user', question);
+        await wait(700);
+        if (stopped()) break;
+        const typing = addBubble('chat-ai chat-typing-bubble');
+        await wait(1400);
+        typing.remove();
+        if (stopped()) break;
+        addBubble('chat-ai', answer);
+      }
+      running = false;
+    };
+
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      if (onScreen && !running) play();
+    }, { threshold: 0.3 }).observe(aiChat);
+  }
+
+  // ---- Real chat ----
+  const suggestions = [
+    '¿Qué servicios ofrecéis?',
+    'Tengo una peluquería, ¿cómo me ayudaríais?',
+    '¿Cómo funciona un asistente de IA en WhatsApp?',
+  ];
+
+  const startLive = () => {
+    if (aiState.live) return;
+    aiState.live = true;
+    aiState.demoToken++;
+    aiCard.classList.add('is-live');
+    aiChat.classList.add('is-live');
+    aiChat.removeAttribute('aria-hidden');
+    aiChat.setAttribute('aria-live', 'polite');
+    if (aiStandEl) {
+      aiStandEl.dataset.tilt = 'off';
+      aiStandEl.style.transform = '';
     }
-    running = false;
+    aiChat.replaceChildren();
+    addBubble('chat-ai', 'Hola, soy el asistente de LiSync. Pruébame como si fueras un cliente: pregúntame qué hacemos o cómo funcionaría en tu negocio.');
+
+    aiSuggest.replaceChildren(...suggestions.map((text) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = text;
+      button.addEventListener('click', () => sendMessage(text));
+      return button;
+    }));
+    aiSuggest.hidden = false;
+    aiNote.hidden = false;
   };
 
-  new IntersectionObserver(([entry]) => {
-    onScreen = entry.isIntersecting;
-    if (onScreen && !running) play();
-  }, { threshold: 0.3 }).observe(aiChat);
+  const sendMessage = async (raw) => {
+    const text = String(raw || '').trim().slice(0, 400);
+    if (!text || aiState.busy) return;
+    startLive();
+
+    if (aiState.turns >= MAX_TURNS) {
+      addBubble('chat-ai', 'Hemos llegado al límite de la demostración. Si quieres seguir hablando, escríbenos desde el formulario de contacto o a lisyncbussines@gmail.com.');
+      return;
+    }
+
+    aiState.busy = true;
+    aiInput.value = '';
+    aiInput.disabled = true;
+    aiSuggest.hidden = true;
+    addBubble('chat-user', text);
+    const typing = addBubble('chat-ai chat-typing-bubble');
+    aiChat.setAttribute('aria-busy', 'true');
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: [...history, { role: 'user', content: text }] }),
+        signal: controller.signal,
+      });
+      if (res.status === 429) throw new Error('rate');
+      if (!res.ok) throw new Error('http');
+      const data = await res.json();
+      const reply = String(data.reply || '').trim();
+      if (!reply) throw new Error('empty');
+
+      history.push({ role: 'user', content: text }, { role: 'assistant', content: reply });
+      aiState.turns++;
+      typing.remove();
+      addBubble('chat-ai', reply);
+    } catch (error) {
+      typing.remove();
+      addBubble('chat-ai', error.message === 'rate'
+        ? 'Has hecho muchas preguntas seguidas. Inténtalo de nuevo en unos minutos o escríbenos a lisyncbussines@gmail.com.'
+        : 'Ahora mismo la demostración no está disponible. Puedes escribirnos a lisyncbussines@gmail.com y te respondemos en menos de 48 horas.');
+    } finally {
+      clearTimeout(timer);
+      aiChat.removeAttribute('aria-busy');
+      aiState.busy = false;
+      aiInput.disabled = false;
+      aiInput.focus({ preventScroll: true });
+    }
+  };
+
+  aiInput.addEventListener('focus', startLive);
+  aiForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    sendMessage(aiInput.value);
+  });
+  if (aiTry) {
+    aiTry.addEventListener('click', () => {
+      startLive();
+      aiCard.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+      aiInput.focus({ preventScroll: true });
+    });
+  }
 }
 
 // --- Services: swipeable 3D coverflow carousel on small screens ---

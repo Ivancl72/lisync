@@ -11,9 +11,8 @@ const {
   FALLBACK_ERROR,
   FALLBACK_RATE_LIMIT,
 } = require('../lib/lisync-assistant');
+const { askClaude: callClaude } = require('../lib/claude');
 
-const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 const DEFAULT_GRAPH_VERSION = 'v23.0';
 
 const MAX_INPUT_CHARS = 1000;
@@ -122,37 +121,7 @@ async function askClaude(waId, userText) {
   const history = getHistory(waId);
   const messages = [...history.turns, { role: 'user', content: userText }];
 
-  const res = await fetchWithTimeout(
-    ANTHROPIC_URL,
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': env('ANTHROPIC_API_KEY'),
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: env('ANTHROPIC_MODEL') || DEFAULT_MODEL,
-        max_tokens: MAX_TOKENS,
-        system: SYSTEM_PROMPT,
-        messages,
-      }),
-    },
-    20_000
-  );
-
-  if (!res.ok) {
-    const detail = await res.json().catch(() => ({}));
-    throw new Error(`anthropic ${res.status} ${detail?.error?.type || ''}`.trim());
-  }
-
-  const data = await res.json();
-  const text = (data.content || [])
-    .filter((block) => block.type === 'text')
-    .map((block) => block.text)
-    .join('')
-    .trim();
-  if (!text) throw new Error('anthropic returned no text');
+  const text = await callClaude({ system: SYSTEM_PROMPT, messages, maxTokens: MAX_TOKENS });
 
   const reply = toWhatsAppFormat(text);
   history.turns.push({ role: 'user', content: userText }, { role: 'assistant', content: reply });

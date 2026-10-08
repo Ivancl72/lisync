@@ -352,6 +352,7 @@ img { max-width: 100%; display: block; }
 .nav-mobile.open a:nth-child(3) { transition-delay: .15s; }
 .nav-mobile.open a:nth-child(4) { transition-delay: .2s; }
 .nav-mobile.open a:nth-child(5) { transition-delay: .25s; }
+.nav-mobile.open a:nth-child(6) { transition-delay: .3s; }
 .nav-mobile .btn {
   margin-top: 28px;
   width: 100%;
@@ -945,6 +946,75 @@ body.menu-open { overflow: hidden; }
 }
 .ai-send svg { width: 14px; height: 14px; }
 
+/* ---------- Real chat (the mockup becomes usable when the visitor engages) ---------- */
+.chat-bubble { overflow-wrap: anywhere; white-space: pre-wrap; }
+
+.ai-card-mock.is-live {
+  animation: none;
+  transform: none;
+}
+.ai-chat.is-live {
+  height: 250px;
+  justify-content: flex-start;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.ai-chat.is-live::-webkit-scrollbar { display: none; }
+.ai-chat.is-live {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px);
+}
+.ai-chat.is-live > :first-child { margin-top: auto; }
+
+.ai-suggest { display: flex; flex-wrap: wrap; gap: 6px; }
+.ai-suggest[hidden], .ai-note[hidden] { display: none; }
+.ai-suggest button {
+  font: inherit;
+  font-size: 11.5px;
+  line-height: 1.3;
+  text-align: left;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.ai-suggest button:hover {
+  background: rgba(139,92,246,0.18);
+  border-color: rgba(168,85,247,0.5);
+  color: var(--text);
+}
+
+.ai-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.ai-input input::placeholder { color: var(--text-dimmer); }
+.ai-input input:disabled { opacity: .6; }
+.ai-input:focus-within { border-color: rgba(168,85,247,0.55); }
+.ai-send { border: 0; cursor: pointer; flex-shrink: 0; }
+.ai-send:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.ai-note {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-dimmer);
+}
+.ai-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 900px) {
+  .ai-input input { font-size: 16px; } /* 16px stops iOS from zooming on focus */
+}
+
 /* Capability chips floating in front of the device at different depths */
 .ai-float {
   position: absolute;
@@ -1074,6 +1144,63 @@ body.menu-open { overflow: hidden; }
 }
 .step h3 { font-size: 1.1rem; color: var(--text); }
 .step p { font-size: 14px; margin-bottom: 0; }
+
+/* ---------- FAQ ---------- */
+.faq-list {
+  max-width: 780px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.faq-item {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  transition: border-color .25s, background .25s;
+}
+.faq-item:hover { border-color: rgba(255,255,255,0.16); }
+.faq-item[open] {
+  border-color: rgba(168,85,247,0.4);
+  background: rgba(139,92,246,0.06);
+}
+.faq-item summary {
+  position: relative;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 16px 56px 16px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before,
+.faq-item summary::after {
+  content: '';
+  position: absolute;
+  right: 22px; top: 50%;
+  width: 14px; height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--gradient-1);
+  transition: transform .3s var(--ease), opacity .3s;
+}
+.faq-item summary::after { transform: rotate(90deg); }
+.faq-item[open] summary::after { transform: rotate(0deg); opacity: 0; }
+.faq-item p {
+  margin: 0;
+  padding: 0 56px 20px 20px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+@media (max-width: 640px) {
+  .faq-item summary { padding: 14px 50px 14px 16px; font-size: .95rem; }
+  .faq-item summary::before, .faq-item summary::after { right: 18px; }
+  .faq-item p { padding: 0 18px 18px 16px; font-size: 14.5px; }
+}
 
 /* ---------- contacto ---------- */
 .contact-section { background: var(--section-fade); overflow: hidden; }

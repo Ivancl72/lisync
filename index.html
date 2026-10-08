@@ -59,6 +59,87 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánto cuesta una página web?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende de lo que necesites: cuántas secciones tiene, qué funcionalidades incluye y si hay que preparar textos o imágenes. Tras contarnos tu caso, te enviamos una propuesta con lo que incluye, los plazos y el precio antes de empezar."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto se tarda?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende del proyecto. En la propuesta te indicamos los plazos antes de empezar y, mientras trabajamos, vas viendo los avances para ajustarlos juntos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Necesito saber de tecnología?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Te lo explicamos todo sin tecnicismos y nos encargamos de la parte técnica."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué necesito para empezar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Solo contarnos qué hace tu negocio y qué quieres conseguir. Si ya tienes logo, textos o fotos, nos sirven; si no, te orientamos sobre qué hace falta."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es un asistente de IA para web o WhatsApp?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Es un asistente que responde a tus clientes al instante, a cualquier hora, usando la información de tu negocio: horarios, servicios, precios y preguntas frecuentes. Puedes probar uno ahora mismo en la sección Integración IA de esta página."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puede equivocarse la IA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Puede cometer errores, como cualquier herramienta. Por eso se configura para responder solo con la información de tu negocio, para no prometer lo que no sabe (precios, plazos...) y para derivar al cliente a una persona cuando hace falta."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Mis clientes sabrán que hablan con una IA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Lo recomendable es avisarles de que les atiende un asistente virtual y dejarles siempre una forma de hablar con una persona. Lo planteamos así desde el principio."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pasa con los datos de mis clientes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Los mensajes se procesan para generar las respuestas. Antes de empezar te explicamos qué datos se tratan y cómo, y solo se recoge lo necesario."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo contacto con vosotros y cuánto tardáis en responder?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Con el formulario de contacto de esta página o escribiendo a lisyncbussines@gmail.com. Respondemos en menos de 48 horas."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
@@ -91,6 +172,7 @@
       <a href="#servicios">Servicios</a>
       <a href="#ia">Integración IA</a>
       <a href="#proceso">Proceso</a>
+      <a href="#faq">Preguntas</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <a href="#contacto" class="btn btn-primary btn-sm nav-cta">Empezar proyecto</a>
@@ -104,6 +186,7 @@
   <a href="#servicios">Servicios</a>
   <a href="#ia">Integración IA</a>
   <a href="#proceso">Proceso</a>
+  <a href="#faq">Preguntas</a>
   <a href="#contacto">Contacto</a>
   <a href="#contacto" class="btn btn-primary">Empezar proyecto</a>
 </nav>
@@ -250,11 +333,11 @@
   <!-- AI INTEGRATION HIGHLIGHT -->
   <section class="section ai-section" id="ia">
     <div class="container ai-inner">
-      <div class="ai-visual reveal" aria-hidden="true">
-        <div class="ai-orb"></div>
-        <div class="ai-pulse-ring"></div>
+      <div class="ai-visual reveal">
+        <div class="ai-orb" aria-hidden="true"></div>
+        <div class="ai-pulse-ring" aria-hidden="true"></div>
         <div class="ai-stand">
-          <div class="ai-card-mock">
+          <div class="ai-card-mock" id="aiCard" role="region" aria-label="Chat de demostración del asistente de IA">
             <div class="ai-card-header">
               <span class="ai-avatar">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z" fill="currentColor"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2z" fill="currentColor" opacity=".7"/></svg>
@@ -264,21 +347,23 @@
                 <small><span class="ai-status-dot"></span> En línea</small>
               </span>
             </div>
-            <div class="ai-chat" id="aiChat">
+            <div class="ai-chat" id="aiChat" aria-hidden="true">
               <div class="chat-bubble chat-user is-shown">¿Tenéis disponibilidad para hoy?</div>
               <div class="chat-bubble chat-ai is-shown">Sí, tengo un hueco a las 19:00. ¿Te lo reservo?</div>
             </div>
-            <div class="ai-input">
-              <span>Escribe un mensaje…</span>
-              <span class="ai-send">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-            </div>
+            <div class="ai-suggest" id="aiSuggest" hidden></div>
+            <form class="ai-input" id="aiForm" autocomplete="off">
+              <input id="aiInput" name="mensaje" type="text" maxlength="400" placeholder="Escribe tu pregunta…" aria-label="Escribe un mensaje al asistente" enterkeyhint="send">
+              <button type="submit" class="ai-send" aria-label="Enviar mensaje">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </form>
+            <p class="ai-note" id="aiNote" hidden>Demostración con IA real. No escribas datos personales: la conversación no se guarda.</p>
           </div>
-          <span class="ai-float ai-float--1">24/7</span>
-          <span class="ai-float ai-float--2">WhatsApp</span>
-          <span class="ai-float ai-float--3">Reservas</span>
-          <span class="ai-float ai-float--4">Al instante</span>
+          <span class="ai-float ai-float--1" aria-hidden="true">24/7</span>
+          <span class="ai-float ai-float--2" aria-hidden="true">WhatsApp</span>
+          <span class="ai-float ai-float--3" aria-hidden="true">Reservas</span>
+          <span class="ai-float ai-float--4" aria-hidden="true">Al instante</span>
         </div>
       </div>
 
@@ -296,7 +381,10 @@
           <li>Responde consultas, gestiona reservas o filtra clientes 24/7</li>
           <li>Se integra en tu web, WhatsApp o donde lo necesites</li>
         </ul>
-        <a href="#contacto" class="btn btn-primary">Quiero IA en mi negocio</a>
+        <div class="ai-cta">
+          <a href="#contacto" class="btn btn-primary">Quiero IA en mi negocio</a>
+          <button type="button" class="btn btn-ghost" id="aiTry">Probar el asistente</button>
+        </div>
       </div>
     </div>
   </section>
@@ -331,6 +419,56 @@
           <h3>Entrega y soporte</h3>
           <p>Recibes tu proyecto listo para usar, con soporte cercano si necesitas cambios.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">Preguntas frecuentes</span>
+        <h2>Lo que suelen preguntarnos</h2>
+        <p>Si no encuentras tu duda, escríbenos y te respondemos en menos de 48 horas.</p>
+      </div>
+
+      <div class="faq-list reveal delay-1">
+        <details class="faq-item" name="faq">
+          <summary>¿Cuánto cuesta una página web?</summary>
+          <p>Depende de lo que necesites: cuántas secciones tiene, qué funcionalidades incluye y si hay que preparar textos o imágenes. Tras contarnos tu caso, te enviamos una propuesta con lo que incluye, los plazos y el precio antes de empezar.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Cuánto se tarda?</summary>
+          <p>Depende del proyecto. En la propuesta te indicamos los plazos antes de empezar y, mientras trabajamos, vas viendo los avances para ajustarlos juntos.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Necesito saber de tecnología?</summary>
+          <p>No. Te lo explicamos todo sin tecnicismos y nos encargamos de la parte técnica.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Qué necesito para empezar?</summary>
+          <p>Solo contarnos qué hace tu negocio y qué quieres conseguir. Si ya tienes logo, textos o fotos, nos sirven; si no, te orientamos sobre qué hace falta.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Qué es un asistente de IA para web o WhatsApp?</summary>
+          <p>Es un asistente que responde a tus clientes al instante, a cualquier hora, usando la información de tu negocio: horarios, servicios, precios y preguntas frecuentes. Puedes probar uno ahora mismo en la sección Integración IA de esta página.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Puede equivocarse la IA?</summary>
+          <p>Puede cometer errores, como cualquier herramienta. Por eso se configura para responder solo con la información de tu negocio, para no prometer lo que no sabe (precios, plazos...) y para derivar al cliente a una persona cuando hace falta.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Mis clientes sabrán que hablan con una IA?</summary>
+          <p>Lo recomendable es avisarles de que les atiende un asistente virtual y dejarles siempre una forma de hablar con una persona. Lo planteamos así desde el principio.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Qué pasa con los datos de mis clientes?</summary>
+          <p>Los mensajes se procesan para generar las respuestas. Antes de empezar te explicamos qué datos se tratan y cómo, y solo se recoge lo necesario.</p>
+        </details>
+        <details class="faq-item" name="faq">
+          <summary>¿Cómo contacto con vosotros y cuánto tardáis en responder?</summary>
+          <p>Con el formulario de contacto de esta página o escribiendo a lisyncbussines@gmail.com. Respondemos en menos de 48 horas.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -432,6 +570,7 @@
         <a href="#top">Inicio</a>
         <a href="#servicios">Servicios</a>
         <a href="#proceso">Proceso</a>
+        <a href="#faq">Preguntas frecuentes</a>
         <a href="#contacto">Contacto</a>
       </div>
 
