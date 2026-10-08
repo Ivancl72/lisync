@@ -486,7 +486,7 @@ form.addEventListener('submit', async (e) => {
     });
 
     if (response.ok) {
-      formStatus.textContent = '¡Mensaje enviado! Te responderemos muy pronto 🚀';
+      formStatus.textContent = '¡Mensaje enviado! Te responderemos muy pronto.';
       formStatus.classList.add('success');
       form.reset();
     } else {
